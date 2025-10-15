@@ -16,16 +16,33 @@ data("knz_bison")
 
 1. Create a new column in the bison dataset that calculates the individual’s age at the time of observation.
 ```{r}
-
+knz_bison <- knz_bison %>%
+  mutate(age_years = rec_year - animal_yob)
 ```
 
 2. Write a function that will first filter the bison dataset based on any user-specified weight threshold (returning the filtered dataset).
 ```{r}
-
+filter_bison_by_weight <- function(weight_threshold) {
+  knz_bison %>%
+    filter(animal_weight >= weight_threshold)
+}
 ```
 
 3. Create a boxplot showing weight distribution between male and female bison, and then conduct a t-test to see if weight is significantly difference between males and females.
 ```{r}
+# Boxplot
+ggplot(knz_bison, aes(x = animal_sex, y = animal_weight, fill = animal_sex)) +
+  geom_boxplot() +
+  labs(
+    title = "Weight Distribution of Bison by Sex",
+    x = "Sex",
+    y = "Weight (kg)"
+  ) +
+  theme_bw()
 
+# T-test
+t_test(animal_weight ~ animal_sex, data = knz_bison, var.equal = FALSE, detailed = TRUE) %>%
+  View()
 ```
 
+- Statistically significant difference in weight between male and female bison. 
